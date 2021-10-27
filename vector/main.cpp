@@ -1,8 +1,8 @@
 #include "vector.hpp"
 
-#include <vector>
+// #include <vector>
 
-#include <iterator>
+// #include <iterator>
 
 class test{
 	public:
@@ -21,11 +21,13 @@ class test{
 };
 
 int main(){
-	// ft::vector<test> fill(3);
-	std::vector<test> sys(3);
+	ft::vector<int> fill(3);
+
+	ft::vector<int>::iterator it = fill.begin();
+	// std::vector<test> sys(3);
 	
-	std::vector<test>::iterator i = sys.begin();
-	std::cout << i->_c << '\n';
+	// std::vector<test>::iterator i = sys.begin();
+	// std::cout << fill[0] << '\n';
 	// for(i = sys.begin(); i != sys.end(); i++)
 	// 	std::cout << *i << '\n';
 	// std::cout << fill.capacity() << '\n';
