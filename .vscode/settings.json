@@ -61,6 +61,14 @@
 		"tuple": "cpp",
 		"type_traits": "cpp",
 		"typeinfo": "cpp",
-		"utility": "cpp"
+		"utility": "cpp",
+		"__tree": "cpp",
+		"deque": "cpp",
+		"iomanip": "cpp",
+		"map": "cpp",
+		"numeric": "cpp",
+		"random": "cpp",
+		"set": "cpp",
+		"stack": "cpp"
 	}
 }
