@@ -7,12 +7,14 @@
 #include "../tools/iterator.hpp"
 #include "../tools/iterator_traits.hpp"
 #include "../tools/reverse_iterator.hpp"
+#include "../tools/type_traits.hpp"
+#include <algorithm>
 
 
 namespace ft{
 	template <typename T, class Alloc = std::allocator<T> >
 	class vector{
-		private:
+		public:
 			typedef				T											value_type;
 			typedef				Alloc										allocator_type;
 			typedef	typename	allocator_type::reference					reference;
@@ -25,10 +27,11 @@ namespace ft{
 			typedef				ft::reverse_iterator< const value_type >	const_reverse_iterator;
 			typedef				std::ptrdiff_t								difference_type;
 			typedef				size_t										size_type;
-
-			value_type											*arr;
-			size_type											size;
-			size_type											capacity;
+		private: 
+			value_type											*_arr;
+			size_type											_size;
+			size_type											_capacity;
+			allocator_type										_alloc;
 
 			value_type*		allocateNfill(size_type n, const value_type& val,
 					const allocator_type& alloc){
@@ -39,19 +42,30 @@ namespace ft{
 			};
 		public:
 			vector(const allocator_type& alloc = allocator_type()){
-				size = 0;
-				capacity = 0;
-				arr = NULL;
+				_size = 0;
+				_capacity = 0;
+				_arr = NULL;
 			}
 			vector(size_type count, const value_type& val = value_type(),
 					const allocator_type& alloc = allocator_type()){
-				size = count;
-				capacity = count;
-				arr = allocateNfill(count, val, alloc);
+				_size = count;
+				_capacity = count;
+				_arr = allocateNfill(count, val, alloc);
+			}
+			<template InputIt>
+			vector( InputIt first, InputIt last, const allocator_type& alloc = allocator_type(),
+					typename ft::enable_if< !ft::is_integral<InputIt>, InputIt >::value = InputIt()){
+					difference_type len = std::distance(first, last);
+					_arr = alloc.allocate(len);
+					_capacity = len;
+					for (InputIt it = first, int z = 0; first != last; first++, z++){
+						alloc.construct(_arr + z, *first );
+						_size++;
+					}
 			}
 
-			vector(  ){
-
+			vector&	operator=(const vector& other){
+				
 			}
 
 			iterator begin(){
