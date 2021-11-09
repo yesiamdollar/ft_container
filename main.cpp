@@ -4,18 +4,16 @@
 // #include "tools/iterator.hpp"
 #include <typeinfo>
 #include <iterator>
+#include "vector/vector.hpp"
 
 
 
 int main(){
-	std::vector<int> v(3, 2);
+	std::vector<char> v1(4, 'a');
+	ft::vector<int> v(4, 'a');
 
-	std::cout << std::hex << &v << std::endl;
-	v.reserve(10);
-	std::cout << v.capacity() << std::endl;
-	std::cout << std::hex << &v << std::endl;
-	v.push_back(33);
-	for (std::vector<int>::iterator it = v.begin(); it != v.end(); it++)
-		std::cout << &it << '\n';
-	return 0;
+	v1[3] = 'b';
+	v[3] = 'b';
+	ft::vector<char>::reverse_iterator it = v.rbegin();
+	std::cout << *it << '\n';
 }
