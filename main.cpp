@@ -9,10 +9,10 @@
 
 
 int main(){
-	std::vector<char> v1(4, 'a');
-	ft::vector<int> v(4, 'a');
+	// std::vector<char> v1(4, 'a');
+	ft::vector<char> v(4, 'a');
 
-	v1[3] = 'b';
+	// v1[3] = 'b';
 	v[3] = 'b';
 	ft::vector<char>::reverse_iterator it = v.rbegin();
 	std::cout << *it << '\n';

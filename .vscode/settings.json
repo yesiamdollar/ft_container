@@ -69,6 +69,7 @@
 		"numeric": "cpp",
 		"random": "cpp",
 		"set": "cpp",
-		"stack": "cpp"
+		"stack": "cpp",
+		"__cxx_version": "cpp"
 	}
 }

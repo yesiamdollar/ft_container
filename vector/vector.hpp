@@ -24,8 +24,8 @@ namespace ft{
 			typedef	typename	allocator_type::const_pointer										const_pointer;
 			typedef				ft::iterator< std::random_access_iterator_tag, value_type >			iterator;
 			typedef				ft::iterator< std::random_access_iterator_tag, const value_type>	const_iterator;
-			typedef				ft::reverse_iterator< value_type >									reverse_iterator;
-			typedef				ft::reverse_iterator< const value_type >							const_reverse_iterator;
+			typedef				ft::reverse_iterator< iterator >									reverse_iterator;
+			// typedef				ft::reverse_iterator< const iterator >								const_reverse_iterator;
 			typedef				std::ptrdiff_t														difference_type;
 			typedef				size_t																size_type;
 		private: 
@@ -159,16 +159,16 @@ namespace ft{
 			reverse_iterator	rbegin(){
 				return end();
 			}
-			const_reverse_iterator	rbegin() const{
-				return end();
-			}
+			// const_reverse_iterator	rbegin() const{
+			// 	return reverse_iterator(end());
+			// }
 
 			reverse_iterator	rend(){
-				return begin();
+				return reverse_iterator(iterator(_arr));
 			}
-			const_reverse_iterator	rend() const{
-				return begin();
-			}
+			// const_reverse_iterator	rend() const{
+			// 	return reverse_iterator(iterator(_arr));
+			// }
 			/* end Iterators */
 			
 			
