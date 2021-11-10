@@ -5,51 +5,49 @@
 #include <cstddef>
 namespace ft{
 
-	template <
-		class Category,
-		class T,
-		class Distance = std::ptrdiff_t,
-		class Pointer = T*,
-		class Reference = T& 
-		> struct iterator {
-			typedef T         value_type;
-			typedef Distance  difference_type;
-			typedef Pointer   pointer;
-			typedef Reference reference;
-			typedef Category  iterator_category;
-			iterator(pointer ptr): _current(ptr){};
-			iterator(const iterator & src) : _current(NULL){ operator=(src); };
 
-			iterator& operator=(const iterator& rhs) {_current = rhs.base(); return *this;}
-			iterator& operator++() {++_current ; return (*this); }
-			iterator operator++(int) {iterator tmp(_current); ++_current ; return (tmp);}
-			iterator& operator--() {--_current ; return (*this);}
-			iterator operator--(int) {iterator tmp(_current); --_current ; return (tmp);}
+	template <class T>
+	class VectorIterator : public ft::iterator<std::random_access_iterator_tag, T>{
+		public:
+			typedef typename ft::iterator<std::random_access_iterator_tag, T>::value_type         value_type;
+			typedef typename ft::iterator<std::random_access_iterator_tag, T>::difference_type  difference_type;
+			typedef typename ft::iterator<std::random_access_iterator_tag, T>::pointer   pointer;
+			typedef typename ft::iterator<std::random_access_iterator_tag, T>::reference reference;
+			typedef typename ft::iterator<std::random_access_iterator_tag, T>::iterator_category  iterator_category;
 
-			bool operator==(const iterator& rhs) { return (_current == rhs.base()); }
-			bool operator!=(const iterator& rhs) { return (_current != rhs.base()); }
+			VectorIterator(pointer ptr): _current(ptr){};
+			VectorIterator(const VectorIterator & src) : _current(NULL){ operator=(src); };
 
-			iterator operator+(difference_type max) { iterator cpy(_current + max); return (cpy); }
-			friend iterator& operator+(difference_type max, iterator const& it) { iterator cpy(it->base() + max); return (cpy); }
+			VectorIterator& operator=(const VectorIterator& rhs) {_current = rhs.base(); return *this;}
+			VectorIterator& operator++() {++_current ; return (*this); }
+			VectorIterator operator++(int) {VectorIterator tmp(_current); ++_current ; return (tmp);}
+			VectorIterator& operator--() {--_current ; return (*this);}
+			VectorIterator operator--(int) {VectorIterator tmp(_current); --_current ; return (tmp);}
+
+			bool operator==(const VectorIterator& rhs) { return (_current == rhs.base()); }
+			bool operator!=(const VectorIterator& rhs) { return (_current != rhs.base()); }
+
+			VectorIterator operator+(difference_type max) { VectorIterator cpy(_current + max); return (cpy); }
+			friend VectorIterator operator+(difference_type max, VectorIterator const& it) { VectorIterator cpy(it->base() + max); return (cpy); }
 			
-			iterator operator-(difference_type max) { iterator cpy(_current - max); return (cpy); }
-			difference_type	operator-(const iterator& rhs) { return (_current - rhs.base()); }
+			VectorIterator operator-(difference_type max) { VectorIterator cpy(_current - max); return (cpy); }
+			difference_type	operator-(const VectorIterator& rhs) { return (_current - rhs.base()); }
 
-			bool	operator<(const iterator& rhs) { return (this->base() < rhs.base()); }
-			bool	operator<=(const iterator& rhs) { return (this->base() <= rhs.base()); }
-			bool	operator>(const iterator& rhs) { return (this->base() > rhs.base()); }
-			bool	operator>=(const iterator& rhs) { return (this->base() >= rhs.base()); }
+			bool	operator<(const VectorIterator& rhs) { return (this->base() < rhs.base()); }
+			bool	operator<=(const VectorIterator& rhs) { return (this->base() <= rhs.base()); }
+			bool	operator>(const VectorIterator& rhs) { return (this->base() > rhs.base()); }
+			bool	operator>=(const VectorIterator& rhs) { return (this->base() >= rhs.base()); }
 
-			iterator& operator+=(difference_type max) { _current += max; return (*this); }
-			iterator& operator-=(difference_type max) { _current -= max; return (*this); }
+			VectorIterator& operator+=(difference_type max) { _current += max; return (*this); }
+			VectorIterator& operator-=(difference_type max) { _current -= max; return (*this); }
 
 			reference	operator*() { return (*(this->base())); }
 			pointer		operator->(){ return (this->base()); }
 			
-			operator    iterator<Category, const value_type>() const
-			{
-				return iterator<Category,const value_type>(_current);
-			}
+			// operator    iterator<const value_type>() const
+			// {
+			// 	return iterator<const value_type>(_current);
+			// }
 
 			pointer base() const { return (_current); }
 

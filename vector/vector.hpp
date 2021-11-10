@@ -14,20 +14,20 @@
 
 namespace ft{
 	template <typename T, class Alloc = std::allocator<T> >
-	class vector{
+	class Vector{
 		public:
-			typedef				T																	value_type;
-			typedef				Alloc																allocator_type;
-			typedef	typename	allocator_type::reference											reference;
-			typedef	typename	allocator_type::const_reference										const_reference;
-			typedef	typename	allocator_type::pointer												pointer;
-			typedef	typename	allocator_type::const_pointer										const_pointer;
-			typedef				ft::iterator< std::random_access_iterator_tag, value_type >			iterator;
-			typedef				ft::iterator< std::random_access_iterator_tag, const value_type>	const_iterator;
-			typedef				ft::reverse_iterator< iterator >									reverse_iterator;
-			// typedef				ft::reverse_iterator< const iterator >								const_reverse_iterator;
-			typedef				std::ptrdiff_t														difference_type;
-			typedef				size_t																size_type;
+			typedef				T										value_type;
+			typedef				Alloc									allocator_type;
+			typedef	typename	allocator_type::reference				reference;
+			typedef	typename	allocator_type::const_reference			const_reference;
+			typedef	typename	allocator_type::pointer					pointer;
+			typedef	typename	allocator_type::const_pointer			const_pointer;
+			typedef				ft::VectorIterator< value_type >			 	iterator;
+			typedef				ft::VectorIterator< const value_type>			const_iterator;
+			typedef				ft::reverse_iterator< iterator >		reverse_iterator;
+			typedef				ft::reverse_iterator< const iterator >	const_reverse_iterator;
+			typedef				std::ptrdiff_t							difference_type;
+			typedef				size_t									size_type;
 		private: 
 			value_type											*_arr;
 			size_type											_size;
@@ -36,13 +36,13 @@ namespace ft{
 
 		public:
 			/* Member functions */
-			vector(const allocator_type& alloc = allocator_type()){
+			Vector(const allocator_type& alloc = allocator_type()){
 				_size = 0;
 				_capacity = 0;
 				_alloc = alloc;
 				_arr = NULL;
 			}
-			vector(size_type count, const value_type& val = value_type(),
+			Vector(size_type count, const value_type& val = value_type(),
 					const allocator_type& alloc = allocator_type()){
 				_size = count;
 				_capacity = count;
@@ -52,7 +52,7 @@ namespace ft{
 					_alloc.construct(_arr + z, val);
 			}
 			template <class InputIt>
-			vector( InputIt first, InputIt last, const allocator_type& alloc = allocator_type(),
+			Vector( InputIt first, InputIt last, const allocator_type& alloc = allocator_type(),
 					typename ft::enable_if< !ft::is_integral<InputIt>::value, InputIt >::value = InputIt()){
 					difference_type len = std::distance(first, last);
 					_arr = alloc.allocate(len);
@@ -64,10 +64,17 @@ namespace ft{
 						_size++;
 					}
 			}
-			vector( const vector& other ){
+			Vector( const Vector& other ){
 				operator=(other);
 			}
-			vector&	operator=(const vector& other){
+			~Vector(){
+				// for (size_type z = 0; z < _size; z++){
+				// 	_alloc.destroy(_arr + z);
+				// }
+				// _alloc.deallocate(_arr, _capacity);
+				std::cout << "all is good \n";
+			}
+			Vector&	operator=(const Vector& other){
 				if (this != &other){
 					this->_capacity = other.capacity();
 					this->_size = other.size();
@@ -157,18 +164,18 @@ namespace ft{
 			}
 
 			reverse_iterator	rbegin(){
-				return end();
+				return reverse_iterator(end());
 			}
-			// const_reverse_iterator	rbegin() const{
-			// 	return reverse_iterator(end());
-			// }
+			const_reverse_iterator	rbegin() const{
+				return reverse_iterator(end());
+			}
 
 			reverse_iterator	rend(){
+				return reverse_iterator(begin());
+			}
+			const_reverse_iterator	rend() const{
 				return reverse_iterator(iterator(_arr));
 			}
-			// const_reverse_iterator	rend() const{
-			// 	return reverse_iterator(iterator(_arr));
-			// }
 			/* end Iterators */
 			
 			
