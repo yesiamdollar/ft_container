@@ -9,6 +9,6 @@ OBJS=	$(SRCS:.cpp=.o)
 
 ALL: $(NAME)
 
-$(NAME): $(HDRS)
+$(NAME): $(SRCS) $(HDRS)
 	clang++ $(SRCS) -o $(NAME)
 

@@ -9,14 +9,15 @@ namespace ft{
 	template <class T>
 	class VectorIterator : public ft::iterator<std::random_access_iterator_tag, T>{
 		public:
-			typedef typename ft::iterator<std::random_access_iterator_tag, T>::value_type         value_type;
-			typedef typename ft::iterator<std::random_access_iterator_tag, T>::difference_type  difference_type;
-			typedef typename ft::iterator<std::random_access_iterator_tag, T>::pointer   pointer;
-			typedef typename ft::iterator<std::random_access_iterator_tag, T>::reference reference;
-			typedef typename ft::iterator<std::random_access_iterator_tag, T>::iterator_category  iterator_category;
+			typedef typename ft::iterator<std::random_access_iterator_tag, T>::value_type			value_type;
+			typedef typename ft::iterator<std::random_access_iterator_tag, T>::difference_type		difference_type;
+			typedef typename ft::iterator<std::random_access_iterator_tag, T>::pointer				pointer;
+			typedef typename ft::iterator<std::random_access_iterator_tag, T>::reference			reference;
+			typedef typename ft::iterator<std::random_access_iterator_tag, T>::iterator_category	iterator_category;
 
+			VectorIterator(): _current(nullptr){};
 			VectorIterator(pointer ptr): _current(ptr){};
-			VectorIterator(const VectorIterator & src) : _current(NULL){ operator=(src); };
+			VectorIterator(const VectorIterator & src) { operator=(src); };
 
 			VectorIterator& operator=(const VectorIterator& rhs) {_current = rhs.base(); return *this;}
 			VectorIterator& operator++() {++_current ; return (*this); }
@@ -44,10 +45,10 @@ namespace ft{
 			reference	operator*() { return (*(this->base())); }
 			pointer		operator->(){ return (this->base()); }
 			
-			// operator    iterator<const value_type>() const
-			// {
-			// 	return iterator<const value_type>(_current);
-			// }
+			operator    VectorIterator<const value_type>() const
+			{
+				return VectorIterator<const value_type>(_current);
+			}
 
 			pointer base() const { return (_current); }
 

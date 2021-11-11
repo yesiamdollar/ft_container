@@ -22,10 +22,10 @@ namespace ft{
 			typedef	typename	allocator_type::const_reference			const_reference;
 			typedef	typename	allocator_type::pointer					pointer;
 			typedef	typename	allocator_type::const_pointer			const_pointer;
-			typedef				ft::VectorIterator< value_type >			 	iterator;
-			typedef				ft::VectorIterator< const value_type>			const_iterator;
+			typedef				ft::VectorIterator< value_type >		iterator;
+			typedef				ft::VectorIterator< const value_type>	const_iterator;
 			typedef				ft::reverse_iterator< iterator >		reverse_iterator;
-			typedef				ft::reverse_iterator< const iterator >	const_reverse_iterator;
+			typedef				ft::reverse_iterator< const_iterator >	const_reverse_iterator;
 			typedef				std::ptrdiff_t							difference_type;
 			typedef				size_t									size_type;
 		private: 
@@ -36,7 +36,8 @@ namespace ft{
 
 		public:
 			/* Member functions */
-			Vector(const allocator_type& alloc = allocator_type()){
+			Vector() : _size(0), _capacity(0), _alloc(allocator_type()), _arr(NULL){};
+			Vector(const allocator_type& alloc ){
 				_size = 0;
 				_capacity = 0;
 				_alloc = alloc;
@@ -53,10 +54,10 @@ namespace ft{
 			}
 			template <class InputIt>
 			Vector( InputIt first, InputIt last, const allocator_type& alloc = allocator_type(),
-					typename ft::enable_if< !ft::is_integral<InputIt>::value, InputIt >::value = InputIt()){
+					typename ft::enable_if< !ft::is_integral<InputIt>::value, InputIt >::type = InputIt()){
 					difference_type len = std::distance(first, last);
-					_arr = alloc.allocate(len);
 					_alloc = alloc;
+					_arr = _alloc.allocate(len);
 					_capacity = len;
 					_size = 0;
 					for (InputIt it = first; it != last; it++){
@@ -72,7 +73,6 @@ namespace ft{
 				// 	_alloc.destroy(_arr + z);
 				// }
 				// _alloc.deallocate(_arr, _capacity);
-				std::cout << "all is good \n";
 			}
 			Vector&	operator=(const Vector& other){
 				if (this != &other){
@@ -153,7 +153,7 @@ namespace ft{
 				return iterator(_arr);
 			}
 			const_iterator begin() const{
-				return iterator(_arr);
+				return const_iterator(_arr);
 			}
 
 			iterator end(){
@@ -196,6 +196,42 @@ namespace ft{
 				return _capacity;
 			}
 			/* end Capacity */
+
+			/* Modifiers */
+			void	resize(size_type n, value_type val = value_type()){
+				if (n < _size){
+					for (int i = n; i < _size; i++){
+						_alloc.destroy(&_arr[i]);
+					}
+					_size = n;
+				}
+				else if (n > _size && n <= _capacity){
+					;
+				}
+				else {
+					;
+				}
+			}
+
+			iterator	insert(iterator pos, const reference value){ /* single element */
+				if (_size == _capacity){
+					value_type	tmp  = _arr;
+					size_type	len = _capacity * 2;
+					_arr = _alloc.allocate(len);
+					for (size_type i = 0; i < len; i++){
+						_alloc.construct(_arr + i, tmp + i);
+					}
+					_size++;
+					_capacity *= 2;
+					for (size_type i = _size - 1; i <= 0; i--){
+						_alloc.destroy(tmp + i);
+					}
+					_alloc.deallocate(tmp);
+				}
+				return pos;
+			}
+			
+			/* end Modifiers */
 	};
 }
 

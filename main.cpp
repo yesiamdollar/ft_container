@@ -6,16 +6,33 @@
 #include <iterator>
 #include "vector/vector.hpp"
 #include <unistd.h>
-
+#include <stdio.h>
 
 int main(){
-	// std::vector<int> v1(4, 42);
-	ft::Vector<int> v(4, 42);
-
-	v[2] = 5;
-
-	ft::Vector<int>::reverse_iterator it = v.rbegin();
-	for (; it != v.rend(); it++)
+	#if 0
+	ft::Vector<int> v(10, 30);
+	v[8] = 33;//
+	for (ft::Vector<int>::reverse_iterator it = v.rbegin(); it != v.rend(); it++)
 		std::cout << *it << ' ';
 	std::cout << '\n';
+	std::cout << v.size() << '\n';
+	#else
+	std::vector<int> v(10, 30);
+	// for (std::vector<int>::iterator it = v.begin(); it != v.end(); it++)
+	// 	std::cout << *it << ' ';
+	std::cout << "\n" << v.size() << ' ' << v.capacity() << "\n";
+	std::vector<int>::iterator it = v.begin();
+	std::cout << std::addressof(it);
+	std::vector<int>::iterator it2 =  v.insert(v.begin() + 3, 32);
+	std::cout << "\n";
+	// std::cout << it2 - v.begin() << std::endl;
+	// for (std::vector<int>::iterator it = v.begin(); it != v.end(); it++)
+	// 	std::cout << *it << ' ';
+	std::cout << "\n";
+	std::vector<int>::iterator it3 = v.begin();
+	std::cout << std::addressof(it3);
+	std::cout << "\n";
+	
+	std::cout << "\n" << v.size() << ' ' << v.capacity() << "\nsys \n";
+	#endif
 }
