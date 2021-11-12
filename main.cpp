@@ -17,19 +17,19 @@ int main(){
 	std::cout << '\n';
 	std::cout << v.size() << '\n';
 	#else
-	std::vector<int> v(10, 30);
-	// for (std::vector<int>::iterator it = v.begin(); it != v.end(); it++)
+	ft::Vector<int> v(10, 30);
+	// for (ft::Vector<int>::iterator it = v.begin(); it != v.end(); it++)
 	// 	std::cout << *it << ' ';
 	std::cout << "\n" << v.size() << ' ' << v.capacity() << "\n";
-	std::vector<int>::iterator it = v.begin();
+	ft::Vector<int>::iterator it = v.begin();
 	std::cout << std::addressof(it);
-	std::vector<int>::iterator it2 =  v.insert(v.begin() + 3, 32);
+	ft::Vector<int>::iterator it2 =  v.insert(v.begin() + 3, 32);
 	std::cout << "\n";
 	// std::cout << it2 - v.begin() << std::endl;
-	// for (std::vector<int>::iterator it = v.begin(); it != v.end(); it++)
+	// for (ft::Vector<int>::iterator it = v.begin(); it != v.end(); it++)
 	// 	std::cout << *it << ' ';
 	std::cout << "\n";
-	std::vector<int>::iterator it3 = v.begin();
+	ft::Vector<int>::iterator it3 = v.begin();
 	std::cout << std::addressof(it3);
 	std::cout << "\n";
 	

@@ -218,14 +218,17 @@ namespace ft{
 					value_type	tmp  = _arr;
 					size_type	len = _capacity * 2;
 					_arr = _alloc.allocate(len);
-					for (size_type i = 0; i < len; i++){
-						_alloc.construct(_arr + i, tmp + i);
+					iterator it = tmp.begin();
+					for (; it != pos ; it++){
+						_alloc.construct(_arr + i, *it);
 					}
-					_size++;
-					_capacity *= 2;
+					_alloc.construct(_arr + i, *pos);
+					
 					for (size_type i = _size - 1; i <= 0; i--){
 						_alloc.destroy(tmp + i);
 					}
+					_size++;
+					_capacity *= 2;
 					_alloc.deallocate(tmp);
 				}
 				return pos;
