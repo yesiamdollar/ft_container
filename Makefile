@@ -10,5 +10,5 @@ OBJS=	$(SRCS:.cpp=.o)
 ALL: $(NAME)
 
 $(NAME): $(SRCS) $(HDRS)
-	clang++ $(SRCS) -o $(NAME)
+	clang++ $(SRCS) -o $(NAME) #-fsanitize=address -g
 

@@ -15,7 +15,7 @@ namespace ft{
 			typedef typename ft::iterator<std::random_access_iterator_tag, T>::reference			reference;
 			typedef typename ft::iterator<std::random_access_iterator_tag, T>::iterator_category	iterator_category;
 
-			VectorIterator(): _current(nullptr){};
+			VectorIterator(): _current(0){};
 			VectorIterator(pointer ptr): _current(ptr){};
 			VectorIterator(const VectorIterator & src) { operator=(src); };
 

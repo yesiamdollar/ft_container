@@ -17,10 +17,10 @@ namespace ft{
 
 			reverse_iterator() : _current(nullptr){}
 			reverse_iterator(iterator_type	x) : _current(x) {}
-			// template< class U > 
-			reverse_iterator(const reverse_iterator& rev_it) { operator=(rev_it); }
-			// template< class U >
-			reverse_iterator	&operator=(const reverse_iterator& other) { _current = other.base(); return *this; }
+			template< class U > 
+			reverse_iterator(const reverse_iterator<U>& rev_it) : _current(rev_it._current) { }
+			template< class U >
+			reverse_iterator	&operator=(const reverse_iterator<U>& other) { _current = other._current; return *this; }
 
 			iterator_type base() const { return _current; }
 

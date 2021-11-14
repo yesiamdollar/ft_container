@@ -31,7 +31,7 @@ namespace ft{
 		typedef std::ptrdiff_t						difference_type;
 	};
 
-	template <class Category, class T, class Distance = ptrdiff_t,
+	template <class Category, class T, class Distance = std::ptrdiff_t,
 			class Pointer = T*, class Reference = T&>
 	struct iterator {
 		typedef T         value_type;

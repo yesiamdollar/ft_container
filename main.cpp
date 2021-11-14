@@ -7,32 +7,24 @@
 #include "vector/vector.hpp"
 #include <unistd.h>
 #include <stdio.h>
+typedef typename ft::Vector<int> vector;
 
 int main(){
-	#if 0
-	ft::Vector<int> v(10, 30);
-	v[8] = 33;//
-	for (ft::Vector<int>::reverse_iterator it = v.rbegin(); it != v.rend(); it++)
-		std::cout << *it << ' ';
+	vector vec(7, 100);
+	for (int i = 0; i < vec.size(); i++)
+		vec[i] = vec[i] + i;
+	std::cout << vec.size() << ' ' << vec.capacity() << '\n';
+	for (int i =0; i < vec.size(); i++)
+		std::cout << vec[i] << ' ';
 	std::cout << '\n';
-	std::cout << v.size() << '\n';
-	#else
-	ft::Vector<int> v(10, 30);
-	// for (ft::Vector<int>::iterator it = v.begin(); it != v.end(); it++)
-	// 	std::cout << *it << ' ';
-	std::cout << "\n" << v.size() << ' ' << v.capacity() << "\n";
-	ft::Vector<int>::iterator it = v.begin();
-	std::cout << std::addressof(it);
-	ft::Vector<int>::iterator it2 =  v.insert(v.begin() + 3, 32);
-	std::cout << "\n";
-	// std::cout << it2 - v.begin() << std::endl;
-	// for (ft::Vector<int>::iterator it = v.begin(); it != v.end(); it++)
-	// 	std::cout << *it << ' ';
-	std::cout << "\n";
-	ft::Vector<int>::iterator it3 = v.begin();
-	std::cout << std::addressof(it3);
-	std::cout << "\n";
-	
-	std::cout << "\n" << v.size() << ' ' << v.capacity() << "\nsys \n";
-	#endif
+	std::cout << std::addressof(vec[0]) << '\n';
+	vec.erase(vec.begin() + 3, vec.end());
+	std::cout << std::addressof(vec[0]) << '\n';
+
+	std::cout << vec.size() << ' ' << vec.capacity() << '\n';
+	for (int i =0; i < vec.size(); i++)
+		std::cout << vec[i] << ' ';
+	std::cout << '\n';
+	std::cout << vec[6] << '\n';
+	return 0;
 }
