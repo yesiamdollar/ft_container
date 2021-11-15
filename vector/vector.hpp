@@ -346,7 +346,7 @@ namespace ft{
 	}
 	template<class T, class Alloc>
 	bool	operator<=(const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs){
-		return(ft::operator<(lhs, rhs) || ft::operator==(lhs, rhs));
+		return(!(rhs < lhs));
 	}
 
 	template<class T, class Alloc>
