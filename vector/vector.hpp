@@ -39,7 +39,7 @@ namespace ft{
 								/* Member functions */
 
 			/*	Default */	
-			Vector(const allocator_type& alloc = allocator_type() ): _size(0), _capacity(0, _alloc(alloc), _arr(0)) {}
+			Vector(const allocator_type& alloc = allocator_type() ): _size(0), _capacity(0), _alloc(alloc), _arr(0) {}
 			
 			/* Fill */
 			Vector(size_type count, const value_type& val = value_type(),
@@ -160,14 +160,14 @@ namespace ft{
 				return reverse_iterator(end());
 			}
 			const_reverse_iterator	rbegin() const{
-				return reverse_iterator(end());
+				return const_reverse_iterator(end());
 			}
 
 			reverse_iterator	rend(){
 				return reverse_iterator(begin());
 			}
 			const_reverse_iterator	rend() const{
-				return reverse_iterator(iterator(_arr));
+				return const_reverse_iterator(begin());
 			}
 			/* end Iterators */
 			
@@ -329,6 +329,34 @@ namespace ft{
 			}
 			/* end Modifiers */
 	};
+
+	template<class T, class Alloc>
+	bool	operator== (const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs){
+		return (ft::equal(lhs.begin(), lhs.end(), rhs.begin())
+				&& (lhs.size() == rhs.size()));
+	}
+	template<class T, class Alloc>
+	bool	operator!= (const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs){
+		return (!(operator==(lhs, rhs)));
+	}
+
+	template<class T, class Alloc>
+	bool	operator< (const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs){
+		return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
+	}
+	template<class T, class Alloc>
+	bool	operator<=(const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs){
+		return(ft::operator<(lhs, rhs) || ft::operator==(lhs, rhs));
+	}
+
+	template<class T, class Alloc>
+	bool	operator> (const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs){
+		return (ft::operator<(rhs, lhs));
+	}
+	template<class T, class Alloc>
+	bool	operator>= (const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs){
+		return (!ft::operator<(lhs, rhs));
+	}
 }
 
 

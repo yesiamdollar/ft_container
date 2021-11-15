@@ -15,12 +15,12 @@ namespace ft{
 			typedef	typename	Iter::reference			reference;
 			typedef	typename	Iter::iterator_category	iterator_category; 
 
-			reverse_iterator() : _current(nullptr){}
+			reverse_iterator() : _current(0){}
 			reverse_iterator(iterator_type	x) : _current(x) {}
 			template< class U > 
 			reverse_iterator(const reverse_iterator<U>& rev_it) : _current(rev_it._current) { }
 			template< class U >
-			reverse_iterator	&operator=(const reverse_iterator<U>& other) { _current = other._current; return *this; }
+			reverse_iterator	&operator=(const reverse_iterator<U>& other) { _current = other.base(); return *this; }
 
 			iterator_type base() const { return _current; }
 
@@ -33,17 +33,17 @@ namespace ft{
 			reverse_iterator& operator--() { ++_current; return *this; }
 			reverse_iterator operator--(int) { reverse_iterator tmp(_current); ++_current; return tmp; }
 			
-			reverse_iterator	operator+(difference_type max) const { reverse_iterator tmp(_current - max); return tmp; }
-			reverse_iterator	operator-(difference_type max) const { reverse_iterator tmp(_current + max); return tmp; }
-			reverse_iterator	operator+=(difference_type max) { _current - max; return *this; }
-			reverse_iterator	operator-=(difference_type max) { _current + max; return *this; }
+			reverse_iterator	operator+(difference_type max) const { return reverse_iterator(base() - max); }
+			reverse_iterator	operator-(difference_type max) const { return reverse_iterator(base() + max); }
+			reverse_iterator	operator+=(difference_type max) { _current -= max; return *this; }
+			reverse_iterator	operator-=(difference_type max) { _current += max; return *this; }
 
 			operator    reverse_iterator<const iterator_type>() const
 			{
 				return reverse_iterator<const iterator_type>(_current);
 			}
 
-			friend	reverse_iterator	operator+(difference_type max, reverse_iterator const& iter) { reverse_iterator cpy(iter.base() + max); return (cpy); }
+			friend	reverse_iterator	operator+(difference_type max, reverse_iterator const& iter) { return reverse_iterator<Iter>(iter.base() - max); }
 			friend	difference_type		operator-(reverse_iterator const& lhs, reverse_iterator const& rhs) { return (rhs.base() - lhs.base()); }
 			friend	bool				operator==(reverse_iterator const& lhs, reverse_iterator const& rhs) { return (lhs.base() == rhs.base()); }
 			friend	bool				operator!=(reverse_iterator const& lhs, reverse_iterator const& rhs) { return (lhs.base() != rhs.base()); }

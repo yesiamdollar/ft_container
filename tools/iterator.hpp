@@ -29,7 +29,7 @@ namespace ft{
 			bool operator!=(const VectorIterator& rhs) { return (_current != rhs.base()); }
 
 			VectorIterator operator+(difference_type max) { VectorIterator cpy(_current + max); return (cpy); }
-			friend VectorIterator operator+(difference_type max, VectorIterator const& it) { VectorIterator cpy(it->base() + max); return (cpy); }
+			friend VectorIterator operator+(difference_type max, VectorIterator const& it) { VectorIterator cpy(it.base() + max); return (cpy); }
 			
 			VectorIterator operator-(difference_type max) { VectorIterator cpy(_current - max); return (cpy); }
 			difference_type	operator-(const VectorIterator& rhs) { return (_current - rhs.base()); }

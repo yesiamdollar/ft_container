@@ -7,24 +7,10 @@
 #include "vector/vector.hpp"
 #include <unistd.h>
 #include <stdio.h>
-typedef typename ft::Vector<int> vector;
+
 
 int main(){
-	vector vec(7, 100);
-	for (int i = 0; i < vec.size(); i++)
-		vec[i] = vec[i] + i;
-	std::cout << vec.size() << ' ' << vec.capacity() << '\n';
-	for (int i =0; i < vec.size(); i++)
-		std::cout << vec[i] << ' ';
-	std::cout << '\n';
-	std::cout << std::addressof(vec[0]) << '\n';
-	vec.erase(vec.begin() + 3, vec.end());
-	std::cout << std::addressof(vec[0]) << '\n';
-
-	std::cout << vec.size() << ' ' << vec.capacity() << '\n';
-	for (int i =0; i < vec.size(); i++)
-		std::cout << vec[i] << ' ';
-	std::cout << '\n';
-	std::cout << vec[6] << '\n';
+	ft::Vector<int>  vec(7, 100);
+	ft::Vector<int>::reverse_iterator it = vec.rbegin() + 2;
 	return 0;
 }
