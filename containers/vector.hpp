@@ -84,11 +84,10 @@ namespace ft{
 			}
 
 			~Vector(){
-				for (size_type i = 0; i < _size; i++)
-					_alloc.destroy(&_arr[i]);
-				_size = 0;
+			for (size_type i = 0; i < _size; i++)
+            	_alloc.destroy(_arr + i);
+			if (_capacity)
 				_alloc.deallocate(_arr, _capacity);
-				_capacity = 0;
 			}
 			
 
@@ -108,6 +107,8 @@ namespace ft{
 			}
 
 			reference at( size_type pos ){
+				if (pos >= _size)
+					throw (std::out_of_range("Vector::at: _pos is >= _size"));
 				return (_arr[pos]);
 			}
 			const_reference at( size_type pos ) const {
@@ -197,10 +198,11 @@ namespace ft{
 			}
 			void        resize (size_type n, value_type val = value_type()) {
                 if (n < this->_size)
-					for (; _size > n; _size--) 
-						_alloc.destroy(&_arr[_size]);
-                else
-					reserve(n);
+					for (size_type i = n; i < _size; i++) 
+						_alloc.destroy(_arr + i);
+                else if (this->_size < n)
+					insert(end(), n - this->_size, val);
+				_size = n;
             }
 			size_type	capacity() const {
 				return _capacity;
@@ -283,7 +285,7 @@ namespace ft{
 			void	push_back(const value_type& val){
 				if (!_capacity)
 					reserve(1);
-				else
+				else if (_size >= _capacity)
 					reserve(_capacity * 2);
 				_alloc.construct(_arr + _size, val);
 				_size++;

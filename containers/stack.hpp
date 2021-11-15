@@ -16,7 +16,7 @@ namespace ft{
 
 			Stack ( const container_type& ctnr = container_type()) : _c(ctnr) {}
 			Stack ( const Stack&	other ) { operator=(other); }
-
+			~Stack() {}
 			Stack& operator= ( const Stack& other ) {
 				if (this != &other){
 					_c = other._c; 
