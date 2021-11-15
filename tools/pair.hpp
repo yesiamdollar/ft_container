@@ -19,7 +19,7 @@ namespace ft{
 
 		T1		first;
 		T2		second;
-		ata */
+		// ata */
 	};
 
 	template< class T1, class T2 >

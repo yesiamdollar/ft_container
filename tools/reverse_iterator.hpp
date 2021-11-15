@@ -26,24 +26,24 @@ namespace ft{
 
 			reference 			operator*() const {iterator_type tmp = _current; return *--tmp;};
 			pointer				operator->() const { return std::addressof(operator*()); };
-			reference			operator[] (difference_type max) const { return base()[-max-1] ;}
+			reference			operator[] (difference_type n) const { return base()[-n-1] ;}
 
 			reverse_iterator& operator++() {--_current; return *this; }
 			reverse_iterator  operator++(int) { reverse_iterator tmp(_current); --_current; return tmp; };
 			reverse_iterator& operator--() { ++_current; return *this; }
 			reverse_iterator operator--(int) { reverse_iterator tmp(_current); ++_current; return tmp; }
 			
-			reverse_iterator	operator+(difference_type max) const { return reverse_iterator(base() - max); }
-			reverse_iterator	operator-(difference_type max) const { return reverse_iterator(base() + max); }
-			reverse_iterator	operator+=(difference_type max) { _current -= max; return *this; }
-			reverse_iterator	operator-=(difference_type max) { _current += max; return *this; }
+			reverse_iterator	operator+(difference_type n) const { return reverse_iterator(base() - n); }
+			reverse_iterator	operator-(difference_type n) const { return reverse_iterator(base() + n); }
+			reverse_iterator	operator+=(difference_type n) { _current -= n; return *this; }
+			reverse_iterator	operator-=(difference_type n) { _current += n; return *this; }
 
 			operator    reverse_iterator<const iterator_type>() const
 			{
 				return reverse_iterator<const iterator_type>(_current);
 			}
 
-			friend	reverse_iterator	operator+(difference_type max, reverse_iterator const& iter) { return reverse_iterator<Iter>(iter.base() - max); }
+			friend	reverse_iterator	operator+(difference_type n, reverse_iterator const& iter) { return reverse_iterator<Iter>(iter.base() - n); }
 			friend	difference_type		operator-(reverse_iterator const& lhs, reverse_iterator const& rhs) { return (rhs.base() - lhs.base()); }
 			friend	bool				operator==(reverse_iterator const& lhs, reverse_iterator const& rhs) { return (lhs.base() == rhs.base()); }
 			friend	bool				operator!=(reverse_iterator const& lhs, reverse_iterator const& rhs) { return (lhs.base() != rhs.base()); }

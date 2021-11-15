@@ -79,15 +79,16 @@ namespace ft{
 					this->_arr = _alloc.allocate(_capacity);
 					for (size_type i = 0; i < _size; i++)
 						_alloc.construct(_arr + i, other[i]);
-					// other._alloc.d
 				}
 				return *this;
 			}
 
 			~Vector(){
 				for (size_type i = 0; i < _size; i++)
-                    _alloc.destroy(&_arr[i]);
-                _alloc.deallocate(_arr, _capacity);
+					_alloc.destroy(&_arr[i]);
+				_size = 0;
+				_alloc.deallocate(_arr, _capacity);
+				_capacity = 0;
 			}
 			
 
