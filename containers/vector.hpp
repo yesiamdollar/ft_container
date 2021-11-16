@@ -224,6 +224,12 @@ namespace ft{
 			}
 			
 			void	insert(iterator pos, size_type n, const value_type& value){ /* fill */
+				if (!n)
+					return ;
+				if (n == 1){
+					insert(pos, value);
+					return ;
+				}
 				difference_type dis = std::distance(begin(), pos);
 				if (!_capacity)
 					reserve(1);
@@ -233,10 +239,10 @@ namespace ft{
 					else
 						reserve(_capacity * 2);
 				}
-				for (difference_type i = _size - 1; i >= dis; i--)
-					_alloc.construct(_arr + i + n, _arr[i]);
-				for (size_type i = 0; i < n; i++ , _size++)
-					_alloc.construct( _arr + dis + i, value);
+				// for (difference_type i = _size - 1; i >= dis; i--)
+				// 	_alloc.construct(_arr + i + n, _arr[i]);
+				// for (size_type i = 0; i < n; i++ , _size++)
+				// 	_alloc.construct( _arr + dis + i, value);
 			}
 
 			template<class InputIt>
