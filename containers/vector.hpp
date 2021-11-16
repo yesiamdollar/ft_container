@@ -231,7 +231,7 @@ namespace ft{
 					return ;
 				}
 				difference_type dis = std::distance(begin(), pos);
-				if (!_capacity)
+				if (!_size)
 					reserve(n);
 				else if (_size + n > _capacity){
 					if (n > _size)
@@ -250,18 +250,18 @@ namespace ft{
 				typename ft::enable_if< !ft::is_integral<InputIt>::value, InputIt >::type = InputIt()){ /* range */
 				difference_type dis = std::distance(begin(), pos);
 				size_type n = std::distance(first, last);
-				if (!_capacity)
-					reserve(1);
+				if (!_size)
+					reserve(n);
 				else if (_size + n > _capacity){
 					if (n > _size)
 						reserve(_size + n);
 					else
 						reserve(_capacity * 2);
 				}
-				// for (difference_type i = _size - 1; i >= dis; i--)
-				// 	_alloc.construct(_arr + i + n, _arr[i]);
-				// for (size_type i = 0; i < n; i++, _size++)
-				// 	_alloc.construct(_arr + dis + i, *first);
+				for (difference_type i = _size - 1; i >= dis; i--)
+					_alloc.construct(_arr + i + n, _arr[i]);
+				for (size_type i = 0; i < n; i++, _size++)
+					_alloc.construct(_arr + dis + i, *first);
 			}
 
 			
