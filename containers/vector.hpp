@@ -329,17 +329,19 @@ namespace ft{
 			void	swap(Vector& other){
 				size_type	_sz = other._size, _cp = other._capacity;
 				T* new_arr = other._arr;
-				allocator_type new_alloc = other._alloc;
+				// allocator_type new_alloc = other._alloc;
 
 				other._size = this->_size;
-				other._capacity = this->_capacity;
-				other._arr = new_arr;
-				other._alloc = new_alloc;
-
 				this->_size = _sz;
+
+				other._capacity = this->_capacity;
 				this->_capacity = _cp;
+				
+				other._arr = new_arr;
 				this->_arr = new_arr;
-				this->_alloc = new_alloc;
+
+				// other._alloc = new_alloc;
+				// this->_alloc = new_alloc;
 				// std::swap(this->_size, other._size);
 				// std::swap(this->_capacity, other._capacity);
 				// std::swap(this->_arr, other._arr);
