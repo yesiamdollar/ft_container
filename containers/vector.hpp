@@ -232,7 +232,7 @@ namespace ft{
 				}
 				difference_type dis = std::distance(begin(), pos);
 				if (!_capacity)
-					reserve(1);
+					reserve(n);
 				else if (_size + n > _capacity){
 					if (n > _size)
 						reserve(_size + n);
