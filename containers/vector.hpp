@@ -39,7 +39,7 @@ namespace ft{
 								/* Member functions */
 
 			/*	Default */	
-			Vector(const allocator_type& alloc = allocator_type() ): _size(0), _capacity(0), _alloc(alloc), _arr(0) {}
+			Vector(const allocator_type& alloc = allocator_type() ): _arr(0), _size(0), _capacity(0),  _alloc(alloc) {}
 			
 			/* Fill */
 			Vector(size_type count, const value_type& val = value_type(),
@@ -211,13 +211,15 @@ namespace ft{
 
 			/* Modifiers */
 			iterator	insert(iterator pos, const value_type& value){ /* single element */
+
 				difference_type	dis = std::distance(begin(), pos);
 				if (!_capacity)
 					reserve(1);
 				else if (_size + 1 > _capacity)
 					reserve(_capacity * 2);
-				for (difference_type i = _size - 1; i > dis; i--)
+				for (difference_type i = _size - 1; i >= dis; i--){
 					_alloc.construct(_arr + i + 1, _arr[i]);
+				}
 				_alloc.construct(_arr + dis, value);
 				_size++;
 				return iterator(_arr + dis);
@@ -231,7 +233,7 @@ namespace ft{
 					return ;
 				}
 				difference_type dis = std::distance(begin(), pos);
-				if (!_size)
+				if (!_capacity)
 					reserve(n);
 				else if (_size + n > _capacity){
 					if (n > _size)
@@ -251,7 +253,7 @@ namespace ft{
 				typename ft::enable_if< !ft::is_integral<InputIt>::value, InputIt >::type = InputIt()){ /* range */
 				difference_type dis = std::distance(begin(), pos);
 				size_type n = std::distance(first, last);
-				if (!_size)
+				if (!_capacity)
 					reserve(n);
 				else if (_size + n > _capacity){
 					if (n > _size)
@@ -329,7 +331,6 @@ namespace ft{
 			void	swap(Vector& other){
 				size_type	_sz = other._size, _cp = other._capacity;
 				T* new_arr = other._arr;
-				// allocator_type new_alloc = other._alloc;
 
 				other._size = this->_size;
 				this->_size = _sz;
@@ -339,13 +340,6 @@ namespace ft{
 				
 				other._arr = this->_arr;
 				this->_arr = new_arr;
-
-				// other._alloc = new_alloc;
-				// this->_alloc = new_alloc;
-				// std::swap(this->_size, other._size);
-				// std::swap(this->_capacity, other._capacity);
-				// std::swap(this->_arr, other._arr);
-				// std::swap(this->_alloc, other._alloc);
 			}
 
 			void	clear(){
@@ -382,6 +376,11 @@ namespace ft{
 	template<class T, class Alloc>
 	bool	operator>= (const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs){
 		return (!ft::operator<(lhs, rhs));
+	}
+
+	template <class T, class Alloc>
+	void swap (Vector<T,Alloc>& x, Vector<T,Alloc>& y){
+		x.swap(y);
 	}
 }
 
