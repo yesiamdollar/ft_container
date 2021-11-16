@@ -258,10 +258,10 @@ namespace ft{
 					else
 						reserve(_capacity * 2);
 				}
-				for (difference_type i = _size - 1; i >= dis; i--)
-					_alloc.construct(_arr + i + n, _arr[i]);
-				for (size_type i = 0; i < n; i++, _size++)
-					_alloc.construct(_arr + dis + i, *first);
+				// for (difference_type i = _size - 1; i >= dis; i--)
+				// 	_alloc.construct(_arr + i + n, _arr[i]);
+				// for (size_type i = 0; i < n; i++, _size++)
+				// 	_alloc.construct(_arr + dis + i, *first);
 			}
 
 			
