@@ -337,7 +337,7 @@ namespace ft{
 				other._capacity = this->_capacity;
 				this->_capacity = _cp;
 				
-				other._arr = new_arr;
+				other._arr = this->_arr;
 				this->_arr = new_arr;
 
 				// other._alloc = new_alloc;
