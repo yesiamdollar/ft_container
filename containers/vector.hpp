@@ -236,7 +236,7 @@ namespace ft{
 				if (!_capacity)
 					reserve(n);
 				else if (_size + n > _capacity){
-					if (n > _size)
+					if (_capacity * 2 < _size + n)
 						reserve(_size + n);
 					else
 						reserve(_capacity * 2);
@@ -256,7 +256,7 @@ namespace ft{
 				if (!_capacity)
 					reserve(n);
 				else if (_size + n > _capacity){
-					if (n > _size)
+					if (_capacity * 2 < _size + n)
 						reserve(_size + n);
 					else
 						reserve(_capacity * 2);
@@ -264,7 +264,7 @@ namespace ft{
 				for (difference_type i = _size - 1; i >= dis; i--)
 					_alloc.construct(_arr + i + n, _arr[i]);
 				for (size_type i = 0; i < n; i++)
-					_alloc.construct(_arr + dis + i, *first);
+					_alloc.construct(_arr + dis + i, *first++);
 				_size += n;
 			}
 
@@ -352,8 +352,7 @@ namespace ft{
 
 	template<class T, class Alloc>
 	bool	operator== (const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs){
-		return (ft::equal(lhs.begin(), lhs.end(), rhs.begin())
-				&& (lhs.size() == rhs.size()));
+		return ((lhs.size() == rhs.size()) && ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
 	}
 	template<class T, class Alloc>
 	bool	operator!= (const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs){
