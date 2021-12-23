@@ -2,6 +2,9 @@
 
 #define iterator_traits_hpp
 
+# include <iterator>
+
+
 namespace ft{
 	template <typename P>
 	struct iterator_traits
