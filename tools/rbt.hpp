@@ -2,6 +2,7 @@
 
 # define RED_BLACK_TREE_HPP
 
+// ACHRAf102030!!
 
 # include <iostream>
 # include <memory>
@@ -11,35 +12,37 @@
 namespace ft {
 	template<class T, class Alloc>
 	struct Node{
-		Node() : key(NULL), left(NULL), right(NULL), color(BLACK) {};
-		Node(T k) : color(RED) {
-			key = _alloc.allocate(1);
-			_alloc.construct(key, k);
+		typedef	T	value_type;
+		Node() : data(NULL), left(NULL), right(NULL), color(BLACK) {};
+		Node(value_type k) : color(RED) {
+			data = _alloc.allocate(1);
+			_alloc.construct(data, k);
 		};
+
 
 
 		Node	&operator=(Node const& src) {
 			if (this != &src) {
-				if (key) {
-					_alloc.destroy(key);
-					_alloc.deallocate(key, 1);
+				if (data) {
+					_alloc.destroy(data);
+					_alloc.deallocate(data, 1);
 				}
 				left = src.left;
 				right = src.right;
 				parent = src.parent;
-				key = _alloc.allocate(1);
-				_alloc.construct(key, *src.key);
+				data = _alloc.allocate(1);
+				_alloc.construct(data, *src.data);
 			}
 			return *this;
 		}
 
 		~Node() {
-			if (key) {
-				_alloc.destroy(key);
-				_alloc.deallocate(key, 1);
+			if (data) {
+				_alloc.destroy(data);
+				_alloc.deallocate(data, 1);
 			}
 		}
-		T*				key;
+		value_type*				data;
 		Node*			parent;
 		Node*			left;
 		Node*			right;
@@ -47,17 +50,18 @@ namespace ft {
 		Alloc			_alloc;
 	};
 
-	template< class T,
-				class Compare = std::less<T>,
-				class Alloc = std::allocator<T>
+	template< class key,
+				class val,
+				class Compare = std::less<key>,
+				class Alloc = std::allocator< ft::pair< key, val> >
 				>
 	class	RBTree{
 		public:
-			typedef	T																	value_type;
+			typedef	ft::pair<key, val>													value_type;
 			typedef	Alloc																allocator_type;
-			typename Alloc::template rebind<Node<value_type, Alloc> >::other	node_allocator; 
+			typename Alloc::template rebind<Node<value_type, Alloc> >::other			node_allocator; 
 			typedef	Compare																compare_operator;
-			typedef ft::Node<T, Alloc>*														Nodeptr;
+			typedef ft::Node<value_type, Alloc>*										Nodeptr;
 		private:
 			Nodeptr				MyNULL;
 			Nodeptr				root;
@@ -67,9 +71,9 @@ namespace ft {
 				if (src == MyNULL) {
 					return ptr;
 				}
-				compare_operator	cmp;
-				// if (ptr->key < src->key) {
-				if (cmp(ptr->key, src->key)) {
+				// compare_operator	cmp;
+				// if (ptr->data < src->data) {
+				if (_comp(ptr->data->first, src->data->first)) {
 					src->left = RBTinsert(src->left, ptr);
 					src->left->parent = src;
 				} else {
@@ -215,7 +219,7 @@ namespace ft {
 						std::cout << ' ';
 					}
 					std::string colors[2] = { "B", "R"};
-					std::cout << src->key << "(" << colors[src->color] << ")";
+					std::cout << src->data->first << "(" << colors[src->color] << ")";
 					std::cout << '\n';
 					printTreeHelper(src->left, space);
 				}
@@ -232,37 +236,7 @@ namespace ft {
 				v->parent = u->parent;
 			}
 
-			Nodeptr minimum(Nodeptr src) {
-				while (src->left != MyNULL) {
-					src = src->left;
-				}
-				return src;
-			}
-
-			Nodeptr maximum(Nodeptr src) {
-				while (src->right != MyNULL) {
-					src = src->right;
-				}
-				return src;
-			}
-
-			Nodeptr	predecessor(Nodeptr src) {
-				Nodeptr tmp = src;
 			
-				while (tmp->right != MyNULL)
-					tmp = tmp->right;
-			
-				return tmp;
-			}
-
-			Nodeptr successor(Nodeptr src) {
-				Nodeptr tmp = src;
-			
-				while (tmp->left != MyNULL)
-					tmp = tmp->left;
-			
-				return tmp;
-			}
 
 			void swapColors(Nodeptr x, Nodeptr y) {
 				unsigned int	color;
@@ -272,18 +246,10 @@ namespace ft {
 			}
 
 			void swapValues(Nodeptr x, Nodeptr y) {
-				T	tmp;
-				tmp = x->key;
-				x->key = y->key;
-				y->key = tmp;
-			}
-
-			Nodeptr	replace(Nodeptr	src) {
-				if (src->right == NULL && src->left == NULL)
-					return NULL;
-				if (src->left)
-					return predecessor(src->left);
-				return successor(src->right);
+				value_type*	tmp;
+				tmp = x->data;
+				x->data = y->data;
+				y->data = tmp;
 			}
 
 			void	deleteFix(Nodeptr x){
@@ -363,7 +329,6 @@ namespace ft {
 					x = z->left;
 					rbTransplant(z, z->left);
 				} else {
-					// y = minimum(z->right);
 					y = maximum(z->left);
 					org_color = y->color;
 					x = y->left;
@@ -381,38 +346,34 @@ namespace ft {
 				}
 				node_allocator.destroy(z);
 				node_allocator.deallocate(z, 1);
-				delete z;
 				if (org_color == BLACK){
 					deleteFix(x);
-					// delete FIX
 				}
 			}
 
 			
 
-			Nodeptr searcher(Nodeptr src, T key) {
-				if (src == MyNULL || src->key == key)
+			Nodeptr searcher(Nodeptr src, value_type data) {
+				if (src == MyNULL || src->data->first == data.first)
 					return src;
-				if (src->key < key)
-						return searcher(src->right, key);
-				return searcher(src->left, key);
+				if (src->data->first < data.first)
+						return searcher(src->right, data);
+				return searcher(src->left, data);
 			}
 			
 		public:
 			RBTree() {
-				// MyNULL = new Node<T, _alloc>();
 				MyNULL = node_allocator.allocate(1);
-				node_allocator.construct(MyNULL, NULL);
 				MyNULL->color = BLACK;
 				MyNULL->right = NULL;
 				MyNULL->left = NULL;
+				MyNULL->data = NULL;
 				root = MyNULL;
 			}
 
-			void insert(T key) {
-				// Nodeptr	ptr = new Node<T>(key);
+			void insert(value_type data) {
 				Nodeptr		ptr = node_allocator.allocate(1);
-				node_allocator.construct(ptr, key);
+				node_allocator.construct(ptr, data);
 				ptr->left = ptr->right = MyNULL;
 				ptr->parent = NULL;
 				root = RBTinsert(root, ptr);
@@ -422,12 +383,14 @@ namespace ft {
 			Nodeptr& getRoot() {
 				return root;
 			}
-			Nodeptr	search(T key) {
-				return searcher(root, key);
+
+
+			Nodeptr	search(value_type data) {
+				return searcher(root, data);
 			}
 
-			void	remove(T key) {
-				Nodeptr	del = search(key);
+			void	remove(value_type data) {
+				Nodeptr	del = search(data);
 
 				if (del == MyNULL) {
 					std::cout << "Node Not Found !!\n";
@@ -438,6 +401,46 @@ namespace ft {
 
 			void printTree() {
 				printTreeHelper(root, 0);
+			}
+
+			Nodeptr minimum(Nodeptr src) {
+				while (src->left != MyNULL) {
+					src = src->left;
+				}
+				return src;
+			}
+
+			Nodeptr maximum(Nodeptr src) {
+				while (src->right != MyNULL) {
+					src = src->right;
+				}
+				return src;
+			}
+
+			Nodeptr	inOrderPredecessor(Nodeptr src) {
+				Nodeptr tmp = src;
+
+				if (tmp->left != MyNULL)
+					return minimum(tmp->left);
+				
+				Nodeptr parent = tmp->parent;
+				while (parent != NULL && tmp == parent->right) {
+					tmp = parent;
+					parent = tmp->parent;
+				}
+				return tmp;
+			}
+
+			Nodeptr inOrderSuccessor(Nodeptr src) { // done
+				Nodeptr tmp = src;
+				if (tmp->right != MyNULL)
+					return minimum(tmp->right);
+				Nodeptr	parent = tmp->parent;
+				while (parent != NULL && tmp == parent->right){
+					tmp = parent;
+					parent = tmp->parent;
+				}
+				return tmp;
 			}
 	};
 };

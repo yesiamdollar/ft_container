@@ -39,7 +39,8 @@ namespace ft{
 			nodePtr		base() const {return _current; }
 			
 			map_iterator&	operator++() {
-				if (_current->)
+				// if (_current->)
+				;
 			}
 
 	};
