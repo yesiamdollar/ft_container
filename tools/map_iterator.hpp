@@ -3,10 +3,10 @@
 # define MAP_ITERATOR
 
 #include "type_traits.hpp"
-
+#include "rbt.hpp"
 namespace ft{
 
-	template<class T, class node>
+	template<class T, class node = ft::RBTree<T> >
 	class map_iterator{
 		public:
 			typedef	node*								nodePtr;
@@ -30,13 +30,17 @@ namespace ft{
 				return *this;
 			}
 
-			bool	operator==(const map_iterator& it) { return  _current == it._current; }
-			bool	operator!=(const map_iterator& it) { return  _current != it._current; }
+			bool	operator==(const map_iterator& it) const { return  _current == it._current; }
+			bool	operator!=(const map_iterator& it) const { return  _current != it._current; }
 
-			value_type&	operator*() { return _current; }
-			pointer		operator->() { return _current; }
+			value_type&	operator*() const { return *_current; }
+			pointer		operator->() const { return _current; }
 			
-
+			nodePtr		base() const {return _current; }
+			
+			map_iterator&	operator++() {
+				if (_current->)
+			}
 
 	};
 
