@@ -1,0 +1,3 @@
+Fixing next issues (WA-TLE) on map
+operator= deep copy :: WA
+erase method :: TLE

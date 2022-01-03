@@ -1,23 +1,24 @@
-#ifndef RED_BLACK_TREE_HPP
+#ifndef MRED_BLACK_TREE_HPP
 
-# define RED_BLACK_TREE_HPP
+# define MRED_BLACK_TREE_HPP
 
 // ACHRAf102030!!
 
 # include <iostream>
 # include <memory>
 # include "pair.hpp"
-# define	RED	1
+# define	MRED	1
 # define	BLACK	0
 namespace ft {
-	template<class T, class Alloc>
+	template< class T, class Alloc>
 	struct Node{
 		typedef	T	value_type;
 		Node() : data(NULL), left(NULL), right(NULL), color(BLACK) {};
-		Node(value_type k) : color(RED) {
+		Node(value_type k) {
 			data = _alloc.allocate(1);
 			_alloc.construct(data, k);
-		};
+			color = MRED;
+		}
 
 
 
@@ -42,7 +43,7 @@ namespace ft {
 				_alloc.deallocate(data, 1);
 			}
 		}
-		value_type*				data;
+		value_type*		data;
 		Node*			parent;
 		Node*			left;
 		Node*			right;
@@ -50,23 +51,22 @@ namespace ft {
 		Alloc			_alloc;
 	};
 
-	template< class key,
-				class val,
-				class Compare = std::less<key>,
-				class Alloc = std::allocator< ft::pair< key, val> >
-				>
+	template< class key, class val, typename T,
+				class Compare, 
+				class Alloc>
 	class	RBTree{
 		public:
-			typedef	ft::pair<key, val>													value_type;
+			typedef	T																	value_type;
 			typedef	Alloc																allocator_type;
-			typename Alloc::template rebind<Node<value_type, Alloc> >::other			node_allocator; 
+			typename Alloc::template rebind<Node<value_type, Alloc> >::other			_node_alloc; 
 			typedef	Compare																compare_operator;
 			typedef ft::Node<value_type, Alloc>*										Nodeptr;
-		private:
 			Nodeptr				MyNULL;
+		private:
 			Nodeptr				root;
 			allocator_type		_alloc;
 			compare_operator	_comp;
+			// node_allocator		_node_alloc;
 			Nodeptr	RBTinsert(Nodeptr src, Nodeptr& ptr) {
 				if (src == MyNULL) {
 					return ptr;
@@ -83,35 +83,20 @@ namespace ft {
 				return src;
 			}
 
-			void	rotateLeft(Nodeptr x) {
-			
+			void rotateLeft(Nodeptr x) {
 				Nodeptr y = x->right;
 				x->right = y->left;
-				/*
-				* if (y) has a left subtree, assign (x) as
-				* the parent of left subtree of (y)
-				*/
 				if (y->left != MyNULL) {
 					y->left->parent = x;
 				}
-				/*
-				* if the (x) parent is null make (y) the root
-				* else if (x) is the left child of the parent,
-				* make (y) as the left child of the parent
-				* else assign (y) as the right child of parent 
-				*/
 				y->parent = x->parent;
-				if (x->parent == NULL) {
+				if (x->parent == nullptr) {
 					this->root = y;
 				} else if (x == x->parent->left) {
 					x->parent->left = y;
 				} else {
 					x->parent->right = y;
 				}
-				
-				/*
-				* then make (y) as th parent of (x)
-				*/
 				y->left = x;
 				x->parent = y;
 			}
@@ -119,50 +104,35 @@ namespace ft {
 			void	rotateRight(Nodeptr x) {			
 				Nodeptr y = x->left;
 				x->left = y->right;
-				/*
-				* if (y) has a right subtree, assign (x) as
-				* the parent of right subtree of (y)
-				*/
 				if (y->right != MyNULL) {
 					y->right->parent = x;
 				}
-				
-				/*
-				* if the (x) parent is null make (y) the root
-				* else if (x) is the right child of the parent,
-				* make (y) as the right child of the parent
-				* else assign (y) as the left child of parent 
-				*/
 				y->parent = x->parent;
-				if (x->parent == NULL) {
+				if (x->parent == nullptr) {
 					this->root = y;
 				} else if (x == x->parent->right) {
 					x->parent->right = y;
 				} else {
 					x->parent->left = y;
 				}
-
-				/*
-				* then make (y) as th parent of (x)
-				*/
 				y->right = x;
 				x->parent = y;
 			}
 
 			void	insetFixRBT(Nodeptr	p) {
-				Nodeptr	ptr = p, parent, grandparent, uncle = NULL;
+				Nodeptr	ptr = p, parent, grandparent, uncle = MyNULL;
 
-				while ((ptr != root) && (ptr->color == RED) && (ptr->parent->color == RED)) {
+				while ((ptr != root) && (ptr->color == MRED) && (ptr->parent->color == MRED)) {
 					parent = ptr->parent;
 					grandparent = parent->parent;
 					if (parent == grandparent->left) {
 						uncle = grandparent->right;
-						if (uncle != MyNULL && uncle->color == RED) {
+						if (uncle != MyNULL && uncle->color == MRED) {
 							/*
-								Uncle is RED, so we do colorflip (parent and uncle with grandparent)
+								Uncle is MRED, so we do colorflip (parent and uncle with grandparent)
 								pushing darkness from the grandparent ... 
 							*/
-							grandparent->color = RED;
+							grandparent->color = MRED;
 							parent->color = BLACK;
 							uncle->color = BLACK;
 							ptr = grandparent;
@@ -182,8 +152,8 @@ namespace ft {
 						}
 					} else {
 						uncle = grandparent->left;
-						if (uncle != MyNULL && uncle->color == RED) {
-							grandparent->color = RED;
+						if (uncle != MyNULL && uncle->color == MRED) {
+							grandparent->color = MRED;
 							parent->color = BLACK;
 							uncle->color = BLACK;
 							ptr = grandparent;
@@ -219,7 +189,7 @@ namespace ft {
 						std::cout << ' ';
 					}
 					std::string colors[2] = { "B", "R"};
-					std::cout << src->data->first << "(" << colors[src->color] << ")";
+					std::cout << src->data->first << "(" << colors[src->color] << ")" << " [" << src->data->second << "]";
 					std::cout << '\n';
 					printTreeHelper(src->left, space);
 				}
@@ -253,64 +223,61 @@ namespace ft {
 			}
 
 			void	deleteFix(Nodeptr x){
-				Nodeptr sibling;
-				// if (x == NULL)
-				// {
-				// 	std::cout << "NULL ya habibi\n";
-				// 	exit(0);
-				// }
+				Nodeptr s;
 				while (x != root && x->color == BLACK) {
-					if (x == x->parent->left) {
-						sibling =  x->parent->right;
-						if (sibling->color == RED){
-							sibling->color = BLACK;
-							x->parent->color = BLACK;
-							rotateLeft(x->parent);
-							sibling = x->parent->right;
-						}
-
-						if (sibling->left->color == BLACK && sibling->right->color == BLACK) {
-							sibling->color = RED;
-							x = x->parent;
-						} else {
-							if (sibling->right->color == BLACK) {
-								sibling->left->color = BLACK;
-								sibling->color = RED;
-								rotateRight(sibling);
-								sibling = x->parent->right;
-							}
-							sibling->color = x->parent->color;
-							x->parent->color = BLACK;
-							sibling->right->color = 0;
-							rotateLeft(x->parent);
-							x = root;
-						}
-					} else {
-						sibling =  x->parent->left;
-						if (sibling->color == RED) {
-							sibling->color = BLACK;
-							x->parent->color = RED;
-							rotateRight(x->parent);
-							sibling = x->parent->left;
-						}
-
-						if (sibling->right->color == BLACK && sibling->left->color == BLACK) {
-							sibling->color = RED;
-							x = x->parent;
-						} else {
-							if (sibling->left->color == BLACK) {
-								sibling->right->color = BLACK;
-								sibling->color = RED;
-								rotateLeft(sibling);
-								sibling = x->parent->left;
-							}
-							sibling->color = x->parent->color;
-							x->parent->color = BLACK;
-							sibling->left->color = BLACK;
-							rotateRight(x->parent);
-							x = root;
-						}
+				if (x == x->parent->left) {
+					s = x->parent->right;
+					if (s->color == MRED) {
+					s->color = BLACK;
+					x->parent->color = MRED;
+					rotateLeft(x->parent);
+					s = x->parent->right;
 					}
+
+					if (s->left->color == BLACK && s->right->color == BLACK) {
+					s->color = MRED;
+					x = x->parent;
+					} else {
+					if (s->right->color == BLACK) {
+						s->left->color = BLACK;
+						s->color = MRED;
+						rotateRight(s);
+						s = x->parent->right;
+					}
+
+					s->color = x->parent->color;
+					x->parent->color = BLACK;
+					s->right->color = BLACK;
+					rotateLeft(x->parent);
+					x = root;
+					}
+				} else {
+					s = x->parent->left;
+					if (s->color == MRED) {
+					s->color = BLACK;
+					x->parent->color = MRED;
+					rotateRight(x->parent);
+					s = x->parent->left;
+					}
+
+					if (s->right->color == BLACK && s->right->color == BLACK) {
+					s->color = MRED;
+					x = x->parent;
+					} else {
+					if (s->left->color == BLACK) {
+						s->right->color = BLACK;
+						s->color = MRED;
+						rotateLeft(s);
+						s = x->parent->left;
+					}
+
+					s->color = x->parent->color;
+					x->parent->color = BLACK;
+					s->left->color = BLACK;
+					rotateRight(x->parent);
+					x = root;
+					}
+				}
 				}
 				x->color = BLACK;
 			}
@@ -318,10 +285,11 @@ namespace ft {
 			void	deleteHelper(Nodeptr z) {
 				Nodeptr x,y;
 				unsigned int org_color = z->color;
-				if (z == root){
-					std::cout << "Deleting root \n";
-				}
+				// if (z == root){
+				// 	std::cout << "Deleting root \n";
+				// }
 				y = z;
+				int y_original_color = y->color;
 				if (z->left == MyNULL) {
 					x = z->right;
 					rbTransplant(z, z->right);
@@ -329,119 +297,208 @@ namespace ft {
 					x = z->left;
 					rbTransplant(z, z->left);
 				} else {
-					y = maximum(z->left);
-					org_color = y->color;
-					x = y->left;
-					if (y->parent == z) {
-						x->parent = y;
-					} else {
-						rbTransplant(y, y->left);
-						y->left = z->left;
-						y->left->parent = y;
-					}
-					rbTransplant(z, y);
+					y = minimum(z->right);
+					y_original_color = y->color;
+					x = y->right;
+				if (y->parent == z) {
+					x->parent = y;
+				} else {
+					rbTransplant(y, y->right);
 					y->right = z->right;
 					y->right->parent = y;
-					y->color = z->color;
 				}
-				node_allocator.destroy(z);
-				node_allocator.deallocate(z, 1);
-				if (org_color == BLACK){
+
+				rbTransplant(z, y);
+				y->left = z->left;
+				y->left->parent = y;
+				y->color = z->color;
+				}
+				// delete z;
+				if (y_original_color == BLACK) {
 					deleteFix(x);
 				}
 			}
 
 			
 
-			Nodeptr searcher(Nodeptr src, value_type data) {
+			Nodeptr searcher(Nodeptr src, value_type data) const {
 				if (src == MyNULL || src->data->first == data.first)
 					return src;
-				if (src->data->first < data.first)
+				// if (src->data->first < data.first)
+				if (_comp(src->data->first, data.first))
 						return searcher(src->right, data);
 				return searcher(src->left, data);
 			}
 			
+			void	cleared(Nodeptr src) {
+				if (src == MyNULL) {
+					return ;
+				}
+				clear(src->left);
+				clear(src->right);
+				_alloc.deallocate(src->data, 1);
+				_node_alloc.deallocate(src, 1);
+			}
 		public:
 			RBTree() {
-				MyNULL = node_allocator.allocate(1);
+				MyNULL = _node_alloc.allocate(1);
 				MyNULL->color = BLACK;
 				MyNULL->right = NULL;
 				MyNULL->left = NULL;
-				MyNULL->data = NULL;
+				value_type	tmp = ft::make_pair<const key, val>(key(), val());
+				MyNULL->data = &tmp;
 				root = MyNULL;
 			}
 
 			void insert(value_type data) {
-				Nodeptr		ptr = node_allocator.allocate(1);
-				node_allocator.construct(ptr, data);
+				// std::cout << data.first << std::endl;
+				Nodeptr		ptr = _node_alloc.allocate(1);
+				_node_alloc.construct(ptr, data);
 				ptr->left = ptr->right = MyNULL;
 				ptr->parent = NULL;
 				root = RBTinsert(root, ptr);
 				insetFixRBT(ptr);
 			}
 
-			Nodeptr& getRoot() {
+			Nodeptr getRoot() const {
+				if (root == MyNULL)
+					return NULL;
 				return root;
 			}
 
 
-			Nodeptr	search(value_type data) {
+			Nodeptr	search(value_type data) const {
 				return searcher(root, data);
 			}
 
-			void	remove(value_type data) {
+			Nodeptr	find(value_type data) const {
+				Nodeptr tmp = searcher(root, data);
+				if (tmp == MyNULL) {
+					return NULL;
+				}
+				return tmp;
+			}
+
+			size_t	remove(value_type data) {
 				Nodeptr	del = search(data);
 
 				if (del == MyNULL) {
-					std::cout << "Node Not Found !!\n";
-					return ;
+					return 0;
 				}
 				deleteHelper(del);
+				return 1;
 			}
 
 			void printTree() {
 				printTreeHelper(root, 0);
 			}
 
-			Nodeptr minimum(Nodeptr src) {
-				while (src->left != MyNULL) {
-					src = src->left;
-				}
-				return src;
-			}
-
-			Nodeptr maximum(Nodeptr src) {
-				while (src->right != MyNULL) {
-					src = src->right;
-				}
-				return src;
-			}
-
-			Nodeptr	inOrderPredecessor(Nodeptr src) {
-				Nodeptr tmp = src;
-
-				if (tmp->left != MyNULL)
-					return minimum(tmp->left);
-				
-				Nodeptr parent = tmp->parent;
-				while (parent != NULL && tmp == parent->right) {
-					tmp = parent;
-					parent = tmp->parent;
+			Nodeptr minimum(Nodeptr src) const {
+				Nodeptr	tmp = src;
+				while (tmp->left != MyNULL) {
+					tmp = tmp->left;
 				}
 				return tmp;
 			}
 
-			Nodeptr inOrderSuccessor(Nodeptr src) { // done
+			Nodeptr maximum(Nodeptr src) const {
+				Nodeptr	tmp = src;
+				while (tmp->right != MyNULL) {
+					tmp = tmp->right;
+				}
+				return tmp;
+			}
+
+			Nodeptr	find_Min(Nodeptr src) const{
+				if (src == NULL)
+					return NULL;
+				Nodeptr tmp = minimum(src);
+				if (tmp == MyNULL)
+					return NULL;
+				return tmp;
+			}
+
+			Nodeptr	find_Max(Nodeptr src) const {
+				if (src == NULL)
+					return NULL;
+				Nodeptr tmp = maximum(src);
+				if (tmp == MyNULL)
+					return NULL;
+				return tmp;
+			}
+
+			Nodeptr	inOrderPredecessor(Nodeptr src) const {
+				Nodeptr tmp = (src);
+
+				if (tmp == NULL)
+					return NULL;
+
+				if (tmp->left != MyNULL)
+					return maximum(tmp->left);
+				
+				Nodeptr parent = tmp->parent;
+				while (parent != NULL && tmp == parent->left) {
+					tmp = parent;
+					parent = tmp->parent;
+				}
+				return parent;
+			}
+
+			Nodeptr inOrderSuccessor(Nodeptr src) const { // done
+
 				Nodeptr tmp = src;
+
+				if (tmp == NULL)
+					return NULL;
+
 				if (tmp->right != MyNULL)
 					return minimum(tmp->right);
+				
 				Nodeptr	parent = tmp->parent;
 				while (parent != NULL && tmp == parent->right){
 					tmp = parent;
 					parent = tmp->parent;
 				}
+				return parent;
+			}
+
+			void	swap (RBTree &src ) {
+				std::swap(root, src.root);
+				std::swap(_alloc, src._alloc);
+				std::swap(_comp, src._comp);
+				std::swap(_node_alloc, src._node_alloc);
+				std::swap(MyNULL, src.MyNULL);
+			}
+
+			void	clear () {
+				cleared(root);
+				root = MyNULL;
+			}
+
+			Nodeptr	bound(const key& k) const {
+				// std::cout << "before :: [" << MyNULL->data->first << "]" << std::endl;
+				Nodeptr src = root;
+				Nodeptr tmp = src;
+				// std::cout << "after :: [" << MyNULL->data->first << "]" << std::endl;
+				while (src != MyNULL && src != MyNULL) {
+					if (_comp(k, src->data->first)){
+						tmp = src;
+						src = src->left;
+					} else if (_comp(src->data->first, k)) {
+						src = src->right;
+					} else {
+						return src;
+					}
+				}
 				return tmp;
 			}
+
+
+
+			// Nodeptr				root;
+			/* Nodeptr				root;
+			allocator_type		_alloc;
+			compare_operator	_comp; */
 	};
 };
 #endif

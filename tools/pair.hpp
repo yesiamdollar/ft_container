@@ -15,7 +15,7 @@ namespace ft{
 		pair (const pair<U1, U2>& p) /* COPY */  :first(p.first), second(p.second) {}
 
 
-		pair&	operator=(const pair& other) { first = other.first; second = other.second; }
+		pair&	operator=(const pair& other) { first = other.first; second = other.second; return *this;}
 
 		T1		first;
 		T2		second;

@@ -3,6 +3,7 @@
 # define reverse_iterator_hpp
 
 # include "iterator_traits.hpp"
+# include "iterator.hpp"
 # include <memory>
 namespace ft{
 	template <class Iter>
