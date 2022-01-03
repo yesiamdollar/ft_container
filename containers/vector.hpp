@@ -99,7 +99,7 @@ namespace ft{
 			/* Range */
 			template <class InputIt>
 			vector( InputIt first, InputIt last,
-					typename ft::enable_if< !ft::is_integral<InputIt>::value, const allocator_type >::type & alloc= allocator_type()) : _alloc(alloc), _capacity(0), _size(0){
+					typename ft::enable_if< !ft::is_integral<InputIt>::value, const allocator_type >::type & alloc= allocator_type()) : _size(0), _capacity(0), _alloc(alloc){
 
 					construct_by_iterator(first, last, typename ft::iterator_traits<InputIt>::iterator_category());
 				
@@ -108,25 +108,34 @@ namespace ft{
 
 			/* Copy */
 			vector( const vector& other ){
+				this->_arr = NULL;
+				this->_size = 0;
+				this->_capacity = 0;
 				*this = other;
 			}
 
 			vector&	operator=(const vector& other){
-				if (this != &other){
+				if (other.capacity() > this->_capacity)
+				{
+					for (size_t i = 0; i < this->_size; i++)
+						_alloc.destroy(_arr + i);
+
+					if (this->_capacity > 0)
+						this->_alloc.deallocate(this->_arr, this->_capacity);
+
+					this->_arr = this->_alloc.allocate(other.capacity());
+					for (size_t i = 0; i < other.size(); ++i)
+						this->_alloc.construct(_arr + i, other[i]);
 					this->_capacity = other.capacity();
-					this->_size = 0;
-					this->_alloc = other.get_allocator();
-					try
-					{
-						this->_arr = _alloc.allocate(_capacity);
-					}
-					catch(std::bad_alloc& ba)
-					{
-						std::cerr << "bad_alloc caught: " << ba.what() << '\n';
-					}
-					
-					for (; _size < other->_size; _size++)
-						_alloc.construct(_arr + _size, other[_size]);
+					this->_size = other.size();
+				}
+				else
+				{
+					for (size_t i = 0; i < this->_size; ++i)
+						_alloc.destroy(_arr + i);
+					for (size_t i = 0; i < other.size(); ++i)
+						this->_alloc.construct(_arr + i, other[i]);
+					this->_size = other.size();
 				}
 				return *this;
 			}
@@ -173,12 +182,12 @@ namespace ft{
 			reference back(){
 				if (_size)
 					return (_arr[_size - 1]);
-				return _arr;
+				return *_arr;
 			}
 			const_reference back() const {
 				if (_size)
 					return (_arr[_size - 1]);
-				return _arr;
+				return *_arr;
 			}
 
 			T* data() {

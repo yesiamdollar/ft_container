@@ -2,8 +2,6 @@
 
 # define MRED_BLACK_TREE_HPP
 
-// ACHRAf102030!!
-
 # include <iostream>
 # include <memory>
 # include "pair.hpp"
@@ -284,7 +282,6 @@ namespace ft {
 
 			void	deleteHelper(Nodeptr z) {
 				Nodeptr x,y;
-				unsigned int org_color = z->color;
 				// if (z == root){
 				// 	std::cout << "Deleting root \n";
 				// }
@@ -314,6 +311,8 @@ namespace ft {
 				y->color = z->color;
 				}
 				// delete z;
+				_node_alloc.destroy(z);
+				_node_alloc.deallocate(z, 1);
 				if (y_original_color == BLACK) {
 					deleteFix(x);
 				}
@@ -334,8 +333,8 @@ namespace ft {
 				if (src == MyNULL) {
 					return ;
 				}
-				clear(src->left);
-				clear(src->right);
+				cleared(src->left);
+				cleared(src->right);
 				_alloc.deallocate(src->data, 1);
 				_node_alloc.deallocate(src, 1);
 			}
@@ -345,9 +344,15 @@ namespace ft {
 				MyNULL->color = BLACK;
 				MyNULL->right = NULL;
 				MyNULL->left = NULL;
-				value_type	tmp = ft::make_pair<const key, val>(key(), val());
-				MyNULL->data = &tmp;
+				MyNULL->data = _alloc.allocate(1);
+				_alloc.construct(MyNULL->data, ft::make_pair(key(), val()));
 				root = MyNULL;
+			}
+
+			~RBTree() {
+				this->clear();
+				_node_alloc.destroy(MyNULL);
+				_node_alloc.deallocate(MyNULL, 1);
 			}
 
 			void insert(value_type data) {

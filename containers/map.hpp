@@ -24,7 +24,7 @@ namespace ft {
 			typedef	typename	allocator_type::reference								reference;
 			typedef	typename	allocator_type::const_reference							const_reference;
 			typedef	typename	allocator_type::pointer									pointer;
-			typedef	ft::RBTree<Key, T, value_type, Compare, Alloc>								rbtree;
+			typedef	ft::RBTree<Key, T, value_type, Compare, Alloc>						rbtree;
 			typedef	ft::Node<value_type, Alloc>											nodee;
 			typedef	typename	allocator_type::const_pointer							const_pointer;
 			typedef	ft::map_iterator<value_type, rbtree, nodee>							iterator;
@@ -51,13 +51,30 @@ namespace ft {
 			map (InputIterator first, InputIterator last,
 				const key_compare& comp = key_compare(),
 				const allocator_type& alloc = allocator_type()) : _comp(comp), _alloc(alloc), _size(0) { /* range */
-					// exit(0);
 					while (first != last) {
 						this->insert(*first);
 						first++;
 					}
 				}
 
+			map	(const map& x) {
+				operator=(x);
+			}
+
+			~map() {
+				// _tree.~RBTree();
+			}
+
+			map& operator= (const map& other) {
+				if (this != &other) {
+					this->clear();
+					// _alloc = other.get_allocator();
+					_comp = other.key_comp();
+					this->insert(other.begin(), other.end());
+
+				}
+				return *this;
+			}
 			/* iterators */
 
 			iterator begin() {
@@ -118,9 +135,8 @@ namespace ft {
 
 			/* Element access */
 			mapped_type& operator[] (const key_type& k) {
-				static int i = 0;
 				value_type val = ft::make_pair(k, mapped_type());
-				this->insert(val);
+				// this->insert(val);
 				return (this->insert(val).first)->second;
 			}
 
@@ -183,6 +199,7 @@ namespace ft {
 
 			void	clear () {
 				_tree.clear();
+				_size = 0;
 			}
 			/* end of Modifiers */
 
